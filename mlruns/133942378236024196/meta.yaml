@@ -1,0 +1,7 @@
+artifact_location: file:///home/miguel/myeloma-explainability/mlruns/133942378236024196
+creation_time: 1772536817377
+experiment_id: '133942378236024196'
+last_update_time: 1772536817377
+lifecycle_stage: active
+name: mm_stage_prediction
+workspace: default

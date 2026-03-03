@@ -1,0 +1,23 @@
+artifact_path: file:///home/miguel/myeloma-explainability/mlruns/133942378236024196/models/m-c32230439ed54376b39a5aa8b7657d1c/artifacts
+flavors:
+  python_function:
+    env:
+      conda: conda.yaml
+      virtualenv: python_env.yaml
+    loader_module: mlflow.sklearn
+    model_path: model.pkl
+    predict_fn: predict
+    python_version: 3.13.12
+  sklearn:
+    code: null
+    pickled_model: model.pkl
+    serialization_format: cloudpickle
+    sklearn_version: 1.8.0
+    skops_trusted_types: null
+mlflow_version: 3.10.0
+model_id: m-c32230439ed54376b39a5aa8b7657d1c
+model_size_bytes: 537672
+model_uuid: m-c32230439ed54376b39a5aa8b7657d1c
+prompts: null
+run_id: 091c37559b7a4d27a8dd98c155f4b138
+utc_time_created: '2026-03-03 11:20:39.802958'
