@@ -1,0 +1,14 @@
+artifact_uri: file:///home/miguel/myeloma-explainability/mlruns/385288088614134993/54adebcf7e9a476db2c951df1840c27f/artifacts
+end_time: 1772531733149
+entry_point_name: ''
+experiment_id: '385288088614134993'
+lifecycle_stage: active
+run_id: 54adebcf7e9a476db2c951df1840c27f
+run_name: XGBoost_baseline
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1772531731125
+status: 3
+tags: []
+user_id: miguel
