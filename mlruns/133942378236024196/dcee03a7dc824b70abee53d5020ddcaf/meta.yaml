@@ -1,0 +1,14 @@
+artifact_uri: file:///home/miguel/myeloma-explainability/mlruns/133942378236024196/dcee03a7dc824b70abee53d5020ddcaf/artifacts
+end_time: 1772537369485
+entry_point_name: ''
+experiment_id: '133942378236024196'
+lifecycle_stage: active
+run_id: dcee03a7dc824b70abee53d5020ddcaf
+run_name: RandomForest_GridSearch
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1772537356330
+status: 3
+tags: []
+user_id: miguel

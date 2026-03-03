@@ -1,0 +1,10 @@
+artifact_location: file:///home/miguel/myeloma-explainability/mlruns/133942378236024196/models/m-c9a2dda9b004472cb3d845647dbed2a6/artifacts
+creation_timestamp: 1772537367675
+experiment_id: '133942378236024196'
+last_updated_timestamp: 1772537369484
+model_id: m-c9a2dda9b004472cb3d845647dbed2a6
+model_type: null
+name: model
+source_run_id: dcee03a7dc824b70abee53d5020ddcaf
+status: 2
+status_message: null

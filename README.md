@@ -57,12 +57,13 @@ myeloma-explainability/
 - Critical features (>50% missing): dropped but replaced with binary availability indicators
 - Remaining missing values: imputed with median
 - Categorical features: label encoded
+- Processed dataset saved to `data/mm_processed.csv` (not versioned)
 
 ### 3. Modeling
 - Problem: 3-class classification (Stage I, II, III)
 - Class imbalance handled with **SMOTE** (Synthetic Minority Over-sampling Technique)
 - Models evaluated: Random Forest, XGBoost (baseline and SMOTE versions)
-- Experiment tracking: **MLflow**
+- Experiment tracking: **MLflow** (local, `mlruns/`)
 
 | Model | F1 weighted | F1 macro |
 |-------|-------------|----------|
@@ -73,11 +74,25 @@ myeloma-explainability/
 | XGBoost baseline | 0.634 | 0.277 |
 
 ### 4. Explainability (SHAP)
-Key findings from SHAP analysis:
-- **B2M_available** is the top predictive feature for Stage I and Stage III
-- **roll_RBC** (red blood cell rouleaux) is important for Stage II and III — consistent with elevated protein levels
-- **Globulins (a_glob, g_glob)** appear consistently — coherent with MM protein profile
-- **HBP** (hypertension) appears in Stage III — may reflect renal damage
+
+#### Global Explanations
+SHAP summary plots and mean absolute SHAP values reveal the most influential features:
+
+| Feature | Clinical meaning | SHAP importance |
+|---------|-----------------|-----------------|
+| B2M_available | Beta-2 Microglobulin availability indicator | 0.040 |
+| a_glob | Alpha globulins | 0.026 |
+| roll_RBC | Red blood cell rouleaux formation | 0.025 |
+| body_surf | Body surface area | 0.021 |
+| g_glob | Gamma globulins | 0.019 |
+| HBP | Hypertension | 0.014 |
+| Fib_available | Fibrinogen availability indicator | 0.013 |
+
+#### Local Explanations
+Waterfall plots generated for one representative patient per stage, showing
+individual feature contributions to each prediction.
+
+All SHAP plots logged as artifacts in MLflow under `plots/shap/`.
 
 ## Critical Limitations
 
@@ -107,8 +122,17 @@ scenarios — precisely where AI could add the most value.
 - SHAP, MLflow
 - FastAPI, Docker (planned)
 
+## Status
+| Phase | Status |
+|-------|--------|
+| EDA | ✅ Complete |
+| Preprocessing | ✅ Complete |
+| Modeling | ✅ Complete |
+| Explainability (SHAP) | ✅ Complete |
+| Deployment (FastAPI + Docker) | 🔜 Planned |
+| Documentation | 🔄 In progress |
+
 ## References
 Guilal R. et al. "Multiple Myeloma Dataset (MM-dataset)".
 University Hospital of Tlemcen, Algeria (2008-2019).
 https://data.mendeley.com/datasets/7wpcv7kp6f/1
-## Project Structure
