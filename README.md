@@ -1,4 +1,3 @@
-
 # Multiple Myeloma Stage Prediction & Explainability
 
 ## Overview
@@ -39,7 +38,7 @@ myeloma-explainability/
 ├── notebooks/
 │   ├── 01_eda.ipynb              # Exploratory Data Analysis
 │   ├── 02_modeling.ipynb         # Model training and evaluation
-│   └── 03_explainability.ipynb   # SHAP analysis
+│   └── 03_explainability.ipynb   # SHAP analysis and bias experiment
 ├── src/                # Source code
 ├── models/             # Trained models
 └── README.md
@@ -94,27 +93,61 @@ individual feature contributions to each prediction.
 
 All SHAP plots logged as artifacts in MLflow under `plots/shap/`.
 
+### 5. Bias Removal Experiment
+
+SHAP analysis revealed that availability indicators (`B2M_available`, `Fib_available`,
+`P_available`, `Ferr_available`) dominated predictions — reflecting **clinical selection
+bias** rather than true biological signal. These tests are ordered when advanced disease
+is already suspected, so their availability is itself a proxy for disease severity.
+
+Retraining the model after removing these indicators produced significantly better results:
+
+| Model | F1 weighted | F1 macro |
+|-------|-------------|----------|
+| RF + SMOTE (with bias indicators) | 0.698 | 0.374 |
+| **RF + SMOTE (without bias indicators)** ✅ | **0.719** | **0.484** |
+
+**Top features without bias — true biological signal:**
+
+| Feature | Clinical meaning |
+|---------|-----------------|
+| a_glob | Alpha globulins — elevated in MM ✅ |
+| roll_RBC | Red blood cell rouleaux — sign of elevated proteins ✅ |
+| TCA | Coagulation time — affected in advanced MM ✅ |
+| CRP | C-reactive protein — inflammation marker ✅ |
+| g_glob | Gamma globulins — monoclonal protein profile ✅ |
+
+**Individual prediction test (real patients from test set):**
+- Stage III: 23/29 correct (79%) ✅
+- Stage I: 1/5 correct (20%) ⚠️
+- Stage II: 1/4 correct (25%) ⚠️
+
+Many predictions show uncertain probabilities (~0.40/0.40/0.20), reflecting
+insufficient training data for Stage I and Stage II.
+
 ## Critical Limitations
 
 ### Clinical Selection Bias
-`B2M_available` being the top feature reflects a **clinical selection bias**:
-Beta-2 Microglobulin is only measured when the medical team already suspects
-advanced MM. The model is learning the diagnostic process bias, not the
-underlying disease biology.
-
-**Consequence:** the model would perform poorly in early detection or screening
-scenarios — precisely where AI could add the most value.
+Availability indicators dominated the original model, reflecting the diagnostic
+process rather than disease biology. Removing them improved F1 macro by 30%
+and revealed clinically coherent biomarkers.
 
 ### Dataset Size
 - Only 190 patients available for modeling
 - Stage I: 25 patients, Stage II: 20 patients — insufficient for robust learning
+- A minimum of 200-300 patients per class would be needed for reliable predictions
 - SHAP findings for Stage II should be interpreted with caution
 
+### Proof of Concept
+This project demonstrates the methodology of explainable AI in clinical settings.
+It is not intended as a clinical decision support tool. The pipeline is directly
+applicable to larger datasets such as MMRF CoMMpass.
+
 ## Future Work
-- Retrain model excluding availability indicators to assess true biological predictive power
 - Validate findings on larger datasets (MMRF CoMMpass)
 - Apply ISS (International Staging System) as alternative target variable
 - Deploy as REST API with FastAPI + Docker
+- Investigate deep learning approaches with larger datasets
 
 ## Tech Stack
 - Python 3.13
@@ -129,8 +162,9 @@ scenarios — precisely where AI could add the most value.
 | Preprocessing | ✅ Complete |
 | Modeling | ✅ Complete |
 | Explainability (SHAP) | ✅ Complete |
+| Bias Removal Experiment | ✅ Complete |
 | Deployment (FastAPI + Docker) | 🔜 Planned |
-| Documentation | 🔄 In progress |
+| Documentation | ✅ Complete |
 
 ## References
 Guilal R. et al. "Multiple Myeloma Dataset (MM-dataset)".
