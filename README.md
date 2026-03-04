@@ -125,6 +125,58 @@ Retraining the model after removing these indicators produced significantly bett
 Many predictions show uncertain probabilities (~0.40/0.40/0.20), reflecting
 insufficient training data for Stage I and Stage II.
 
+## Deployment
+
+### FastAPI REST API
+The bias-free model is served via a FastAPI REST API.
+
+**Start the API:**
+```bash
+source venv/bin/activate
+uvicorn src.api:app --reload --port 8000 --host 0.0.0.0
+```
+
+**Endpoints:**
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/health` | API health check |
+| GET | `/features` | List of required input features |
+| POST | `/predict` | Predict stage for a single patient |
+
+**Example prediction request:**
+```json
+{
+  "features": {
+    "CBC_Hgb": 7.5,
+    "Ca": 130.0,
+    "creat": 35.0,
+    "prot_rate": 120.0,
+    "a_glob": 8.0,
+    "g_glob": 35.0,
+    "roll_RBC": 1,
+    "CRP": 85.0
+  }
+}
+```
+
+**Example response:**
+```json
+{
+  "predicted_stage": "Stage_III",
+  "probabilities": {
+    "Stage_I": 0.24,
+    "Stage_II": 0.22,
+    "Stage_III": 0.54
+  },
+  "disclaimer": "Proof of concept only. Not intended for clinical use."
+}
+```
+
+**Interactive documentation:** `http://localhost:8000/docs`
+
+**OpenAPI v3 specification:** `docs/openapi.yaml` and `docs/openapi.json`
+
 ## Critical Limitations
 
 ### Clinical Selection Bias
